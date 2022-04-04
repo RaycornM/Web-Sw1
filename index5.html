@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<!-- <script src="https://unpkg.com/vue@next"></script> -->
+	</head>
+	<body>
+		<!-- v-for 循环  
+		1.用于遍历list或者dict中的数据 （集合）
+		2.语法 list->   v-for="obj[,index] in(of) list"
+		     obj是遍历的list中的对象 index是下标
+		3.语法 dict->  v-for="value[,key,index] in(of) dict"
+		      value是dict中的 value  key是dict中的key 
+			  index是dict中的 key的顺序，0开始
+			  
+			  补充：push：追加
+			  pop：移除最后一个，并且返回这个对象
+			  shift：删除第一个元素
+			  unshift：在开头追加元素
+			  splice:替换元素
+			  sort:排序
+			  reverse:反转 
+		-->
+		<div id="app">
+			<ul> <!--  obj是arr中的一个元素 -->
+				<li v-for="obj of arr">{{obj}}</li>
+			</ul>
+			<ul> <!--  index -->
+				<li v-for="obj,index in arr">
+					{{obj}}---{{index}}</li>
+			</ul>
+			<ul> <!--  value -->
+				<li v-for="value,key,index in dict">
+					{{key}}---{{value}}---{{index}}</li>
+			</ul>
+			<input type="button" value="arr" @click="updateArr()" />
+		</div>
+	</body>
+</html>
+<script  src="js/v2.6.10/vue.js" type="text/javascript"></script>
+<script>
+	var app = new Vue({
+		el:"#app",  
+		data:{  
+			arr:["首页","购物车","地址","订单"],
+			dict:{
+				title:"java入门到高薪",
+				author:"老任"
+			}
+		},
+		methods:{  
+			updateArr(){
+				this.arr.push("A");//尾部追加 
+				this.arr.splice(2,1);//2开始，删除1个元素
+			}
+		},
+	});
+
+	
+
+</script>
+

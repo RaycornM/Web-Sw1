@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!-- 
+		v-bind:M->V 单向
+		v-model：双向操作，只对input select textarea checkbox 等起效 
+		加后缀 
+		.lazy：没有这个后缀，每输入一个字母都会运算一次
+		.trim：去掉左右空格-->
+		<div id="app">
+			<p>用户名：<input type="text" v-model:value.lazy.trim="nameValue"/></p>
+			<p>{{getName()}}</p>
+		</div>
+	</body>
+</html>
+<script src="js/v2.6.10/vue.js" type="text/javascript"></script>
+<script>
+	var app = new Vue({
+		el:"#app",
+		data:{
+			nameValue:"张三",
+			age:15,
+		},methods:{
+			getName(){
+				return this.nameValue.length;
+			}
+		},
+	});
+</script>

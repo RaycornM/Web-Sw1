@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!-- 用旧知识解释新知识 
+			 在js中如果想标签中插入html或者文本内容
+			 innerHTML\innerText
+			 在jq中如果想标签中插入html或者文本内容
+			 html()\text()\val()
+			 在vue中也有一样的功能
+			 v-html\v-text
+			 
+			 1.v-html和v-text的好处是可以解决之前插值表达式的渲染问题
+			 （就是每次刷新前都会出现花括号）
+			 2.v-html和v-text的区别在于前者能识别html标签-->
+		<div id="app">
+			{{htmls}} <br/>
+			<span v-text="htmls"></span><br/>
+			<span v-html="htmls"></span><br />
+			
+		</div>
+	</body>
+</html>
+<script src="js/v2.6.10/vue.js" type="text/javascript"></script>
+<script>
+	var app = new Vue({
+		el:"#app",
+		data:{
+			htmls:"<h1>h1有效果🐎？<h1>"
+		},methods:{
+			
+		},
+	});
+</script>

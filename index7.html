@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<style>
+	
+	</style>
+	<body>
+		<!-- 运算+法 -->
+		<div id="app">
+			<input type="text" v-model.number="one" value="" /><br />
+			<input type="text" v-model.number="two" value="" /><br />
+			<input type="text" v-model.number="numbers" value="" /><br />
+		</div>
+	</body>
+</html>
+<script src="js/v2.6.10/vue.js" type="text/javascript"></script>
+<script>
+	var app = new Vue({
+		el:"#app",
+		data:{
+			one:1,
+			two:2,
+			three:3,
+			
+		},methods:{
+			
+		},computed:{ //有一个结果缓存
+			numbers:{
+				get:function(){
+					return this.one + this.two;
+				},
+				set:function(value){
+					this.one = 5;
+					this.two = vlaue-this.one;
+				}
+			}
+		},watch:{
+			// one:function(){
+			// 	this.three = this.one + this.two;
+			// },
+			// two:function(){
+			// 	this.three = this.one + this.two;
+			// }
+		}	
+	});
+</script>

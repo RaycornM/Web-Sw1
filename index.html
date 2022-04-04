@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<!-- <script src="https://unpkg.com/vue@next"></script> -->
+		<!--<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>-->
+	</head>
+	<body>
+		<div id="app">
+			<!-- 插值 -->
+			{{ helloVue }} <br/>
+			<!-- 运算 -->
+			{{ age + 100 }} <br/>
+			<!-- 3目运算符 -->
+			{{ age > 18?'成年了':'小孩子' }} <br/>
+			<!-- 函数调用 -->
+			{{ getAge() }} <br/>
+			<h1 v-show="isShow">还能看到吗👀</h1>
+		</div>
+		
+	</body>
+</html>
+<script src = "js/v2.6.10/vue.js" type="text/javascript"></script>
+<script>
+	/**
+	 * 1.必须在body中给予vue定义一个容器，因为vue会转化容器中的标签成为虚拟对象
+	 * 	 这个容器一般情况下我们会使用div id="app"
+	 * 2.需要new Vue对象，并传入初始化值  包括挂接点（容器），data（数据），
+	 * 	 method（函数），created(){}，运算监听等
+	 */
+	var app = new Vue({
+		//以key -> value的方式记录的
+		el:"#app", //挂接点（挂接容器） # 代表标签的id名称
+		data:{ //数据，作用是用来和页面进行数据交互和数据存储
+			helloVue:"第一个Vue",
+			age:10,
+			getAge(){ //函数可以放在data中
+				return 100;
+			},
+			isShow:true,
+		},
+		methods:{ //js函数（自定义函数），原则上说method也可以放入data
+			
+		},
+	});
+</script>

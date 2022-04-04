@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+	</head>
+	<style>
+		.ok{background: #ADFF2F;}
+		.no{background: #FF0000;}
+	</style>
+	<body>
+		<!--
+		   v-on : 事件绑定 可以进行简写 @
+		-->
+		<div id="app">
+			<p  onclick="pClick(); ">html的绑定</p>
+			<p>用户名:
+			<input type="text" v-model="nameValue" 
+			        v-on:blur="nameBlur()"/>
+			<span :class="errType?'ok':'no'">{{nameErr}}</span></p>
+			<p><input type="button" value="v-on" 
+			     @click.once="buttonClick()"/></p>
+				<!--
+				@click
+				.middle 中间滚球触发
+				.left  鼠标左键
+				.right 鼠标右键
+				.once  只触发一次
+				.self  只触发绑定事件本身
+				.stop
+				更加过的操作就由各位同学自己扩展
+				事件冒泡: 
+				由于操作过程中可能有嵌套的关系,所以会触发冒泡机制.
+				如果需要阻止冒泡.通常使用.stop进行修饰. 
+				-->
+		</div>
+	</body>
+</html>
+<script  src="js/v2.6.10/vue.js" type="text/javascript"></script>
+<script>
+	var app = new Vue({
+		el:"#app",  
+		data:{  
+			nameValue:"",
+			nameErr:"",
+			errType:false,
+		},
+		methods:{  
+			nameBlur(){
+				var rex = /^[a-z][a-zA-Z0-9]{3,9}$/;
+				if(rex.test(this.nameValue)){
+					this.nameErr="ok";
+					this.errType=true;
+				}else{
+					this.nameErr="请输入字母开头。。4-10个";
+					this.errType=false;
+				}
+			},
+			buttonClick:function(){
+				if(this.errType){
+					window.location.href=
+					  "http://www.baidu.com";
+				}else{
+					alert("请检查用户名");
+					// 弹框也是弹出一个遮盖层 
+				}
+			},
+		},
+	});
+	
+</script>
+
