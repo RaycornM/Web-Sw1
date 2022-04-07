@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<style type="text/css">
+		table{
+			width: 900px;
+		}
+		td{
+			text-align: center;
+			width: 150px;
+		}
+		.numTD input{
+			width: 30px;
+		}
+	</style>
+	<body>
+		<!-- 购物车 -->
+		<div id="app">
+			<table border="1">
+				<tr>
+					<td>选择框</td>
+					<td>商品名称</td>
+					<td>商品单价</td>
+					<td>商品数量</td>
+					<td>商品总价</td>
+					<td>操作</td>
+				</tr>
+				<tr v-for="obj,index in objs">
+					<td><input type="checkbox" name="objCheck"
+					 v-model="checkArr" :value="obj.sid" /></td>
+					<td>{{obj.sname}}</td>
+					<td>￥<span>{{obj.spic}}</span></td>
+					<td class="numTD">
+						<input type="button" @click="addNum(index)" value="+" />
+						<input type="text" v-model="obj.snum" value="" />
+						<input type="button" @click="jianNum(index)" value="-" />
+					</td>
+					<td>{{obj.ssum}}</td>
+					<td><input type="button" value="删除" @click="deleteObj(index)" /></td>
+				</tr>
+			</table><!-- isallClick是运算结果 -->
+			<input type="checkbox" v-model="isallClick" value="all" /> ----提交订单
+			-----------总价：{{sumNumbers}}
+		</div>
+	</body>
+</html>
+<script src="js/v2.6.10/vue.js" type="text/javascript"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+	var app = new Vue({
+		el:"#app",
+		data:{
+			allCheck:false, //boolean是直接能记录多选框的状态
+			//checkArr:[false,false,false],
+			checkArr:[],
+			
+			objs:[],
+		},created(){//无论是echarts还是vue等，其实生命周期原理大同小异
+					//钩子在创建后，渲染数据之前，可以对data中的数据做准备
+					//局部刷新，就是异步发送请求到服务器端，获取数据，局部更新页面
+					//vue官方推荐使用axios 操作简单便捷
+					//1.导入包  axios就是ajax
+					//2.编写axios.post(url,参数) axios.get()
+					//参数建议是{key:value,key:value}
+			return; //现在用于停止功能		
+			axios.post("/getdata.do",
+			{sid:1}).then(res=>{ //function(res){}
+				var data = res.data; //获取返回的数据 一般是返回json格式
+				this.objs = data; //数据从服务器来
+			}).catch(err=>{ //异常处理
+				console.log(err);
+			});
+		},methods:{
+			addNum(index){
+				var obj = this.objs[index];
+				if(this.objs[index].snum<10){
+					obj.snum += 1;
+					obj.ssum = obj.snum*obj.spic;
+				}
+			},
+			jianNum(index){
+				var obj = this.objs[index];
+				if(obj.snum>1){
+					obj.snum -= 1;
+					obj.ssum = obj.snum*obj.spic;
+				}
+			},
+			deleteObj(index){
+				//检查是否被选中过,对这个数据进行删除
+				for(var i=0;i<this.checkArr.length;i++){
+					if(this.objs[index].sid == this.checkArr[i]);
+					this.checkArr.splice(i,1);
+					break;
+				}
+				this.objs.splice(index,1);
+								
+			}
+		},computed:{ //数据运算
+			isallClick:{
+				get:function(){ //get方法是返回结果到V
+					if(this.checkArr.length == this.objs.length){
+						return true;
+					}
+					return false; //运算的返回
+				},
+				set:function(value){ //是将接收V的操作
+					if(value){
+						for(var i=0;i<this.objs.length;i++){
+							this.checkArr.push(this.objs[i].sid);
+						}
+					}else{
+						this.checkArr=[];
+					}
+				}
+			},
+			sumNumbers:{
+				get:function(){
+					if(this.checkArr.length == 0){
+						return 0;
+					}
+					nums = 0; //计算的总价
+					var nums = 0; //总数
+						for(var i=0;i<this.objs.length;i++){
+							var obj = this.objs[i];
+							for(var j=0;j<this.checkArr.length;j++){
+								if(obj.sid == this.checkArr[j]){
+									nums += obj.ssum; //累加选中的每个商品的总价
+								}
+							}
+						}
+						return nums;
+					}
+				}
+		},watch:{ //不是事件监听，是数据监听
+			// checkArr(newValue,oldValue){
+			// 	console.log("新值：" + newValue);
+			// 	console.log("旧值：" + oldValue);
+			// 	if(newValue.length == this.objs.length){
+			// 		this.allCheck = true;
+			// 	}else{
+			// 		this.allCheck = false;
+			// 	}
+			// },
+			// allCheck(newValue,oldValue){ //全选
+			// 	console.log("新值：" + newValue + "旧值：" + oldValue);
+			// 	console.log(this.allCheck);
+			// 	if(newValue){ //true
+			// 		for(var i=0;i<this.objs.length;i++){
+			// 			this.checkArr.push(this.objs[i].sid);
+			// 		}
+			// 	}else{
+			// 		this.checkArr=[];
+			// 	}
+			// }
+		}
+	});
+</script>
+
+<!-- watch数据监听：只能监听vue的data中定义的数据
+	 编写方式
+		数据字段(新值，旧值){处理代码}
+		监听执行是在data数据修改之后(修改中  AOP 切面)
+		
+watch数据监听比较难以操作
+	 在开发不要让监听形成循环调用
+	 实际开发中比较少使用数据监听，因为有可能出问题
+监听过程发生的事情：
+	1.界面数据修改V -> data数据M(M修改) -> watch(监听)
+	2.watch监听只能是监听data中的数据 
+运算：
+computed 数据计算
+	1.界面检查结果V -> 有一个结果缓存(如果发生改变) -> 重新计算m
+	2.计算是计算的非data的数据，而是在V中绑定的一个结果数据
+		-->
